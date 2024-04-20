@@ -30,9 +30,9 @@ def require_elevation(func):
 
 
 class BSPlayerRegistryInstaller:
-    BSPLAYER_KEY_REGEX = re.compile(r"BSPlayerFile\.[A-Z].*?")
+    BSPLAYER_KEY_REGEX = re.compile(r"VLC\.[a-zA-Z].*?")
     REGISTRY_HIVE = winreg.HKEY_CLASSES_ROOT
-    CONTEXT_MENU_TITLE = 'Download Subtitles'
+    CONTEXT_MENU_TITLE = 'Descargar Subtitulos'
     CONTEXT_MENU_COMMAND_TEMPLATE = string.Template('${python_executable} -m bsplayer.scripts.download_subtitles "%1"')
 
     def __init__(self, python_executable):
@@ -87,7 +87,7 @@ class BSPlayerRegistryInstaller:
 def install(python_executable):
     installer = BSPlayerRegistryInstaller(python_executable)
     installer.install()
-    print('Successfully installed context menu', file=sys.stderr)
+    print('VLC.mkv Successfully installed context menu', file=sys.stderr)
 
 
 if __name__ == '__main__':

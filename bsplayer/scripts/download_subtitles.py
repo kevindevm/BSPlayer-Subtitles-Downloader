@@ -21,9 +21,9 @@ def main(video_path_glob, dest_directory, language, timeout, tries, verbose, no_
     if not no_wildcard:
         video_files = glob.glob(video_path_glob)
     if not video_files:
-        sys.exit('ERROR: No files matched')
+        sys.exit('ERROR: WTF No files matched')
     if not language:
-        language = 'eng,eng'
+        language = 'spa,es'
 
     try:
         with BSPlayer(timeout=timeout, tries=tries, verbose=verbose) as bsplayer:

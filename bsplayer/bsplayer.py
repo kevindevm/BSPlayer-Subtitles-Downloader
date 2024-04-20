@@ -2,7 +2,7 @@ import os
 import random
 import sys
 from xml.etree import ElementTree
-
+from pathlib import Path
 import logbook
 import requests
 
@@ -53,7 +53,7 @@ class BSPlayer:
         sub_domain = random.choice(cls.SUB_DOMAINS)
         return cls.API_URL_TEMPLATE.format(sub_domain=sub_domain)
 
-    def __init__(self, search_url=None, timeout=None, tries=5, verbose=False):
+    def __init__(self, search_url=None, timeout=None, tries=5, verbose=True):
         self.search_url = search_url or self.get_sub_domain()
         self.token = None
         self.logger = logbook.Logger('BSPlayerLogger')
@@ -61,7 +61,7 @@ class BSPlayer:
         self.timeout = timeout / tries
 
         if verbose:
-            self.logger.handlers.append(logbook.StreamHandler(sys.stdout))
+            self.logger.handlers.append(logbook.StreamHandler(sys.stderr))
 
     def __enter__(self):
         self.login()
@@ -157,11 +157,11 @@ class BSPlayer:
             raise SubtitlesNotFoundException(video_path)
 
     @BSPlayerDecorators.requires_login
-    def download_by_path(self, video_path, dest_directory=None, language_ids='eng,eng'):
-        if dest_directory is None:
-            dest_directory = os.path.join(os.path.dirname(video_path), self.SUBS_DIRECTORY_NAME)
-        os.makedirs(dest_directory, exist_ok=True)
+    def download_by_path(self, video_path, dest_directory=None, language_ids='spa,es'):
+        # if dest_directory is None:
+        dest_directory = os.path.dirname(video_path)
+        # os.makedirs(dest_directory, exist_ok=True)
         self.logger.info(f'Downloading subtitles for file {video_path}, storing at directory {dest_directory}')
-
+        name = Path(video_path).stem
         subtitles = self.search_subtitles(video_path, language_ids)
-        return subtitles.sort_by_rating()[0].download(dest_directory)
+        return subtitles.sort_by_rating()[0].download(dest_directory,name + ".srt")

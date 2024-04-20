@@ -13,7 +13,7 @@ class Subtitle(ElementTreeObject):
     __types__ = {'size': int, 'rating': int}
     __repr_format__ = '<{name}: {language} ({rating})>'
 
-    def download(self, directory):
+    def download(self, directory,name):
         if directory is None:
             raise TypeError("You didn't specify the destination directory")
 
@@ -24,7 +24,7 @@ class Subtitle(ElementTreeObject):
             raise Exception('Error while downloading subtitles')
 
         with gzip.GzipFile(fileobj=io.BytesIO(res.content)) as gf:
-            with open(os.path.join(directory, self.name), 'wb') as f:
+            with open(os.path.join(directory, name), 'wb') as f:
                 f.write(gf.read())
 
         return True
